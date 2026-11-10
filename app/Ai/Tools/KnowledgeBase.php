@@ -41,8 +41,8 @@ class KnowledgeBase implements Tool
             return 'Unknown topic. Available topics: '.implode(', ', $this->topics).'.';
         } // the topic is the argument passed to the tool, it must match one of the topics in the $topics array
 
-        $path = storage_path("app/private/ai-context/{$topic}.md");
-        // the path to the context file is constructed using the topic argument, it is stored in the storage/app/private/ai-context directory
+        $path = resource_path("ai-context/{$topic}.md");
+        // the path to the context file is constructed using the topic argument, it is stored in the resources/ai-context directory
 
         if (! File::exists($path)) {
             return "No knowledge file found for \"{$topic}\".";

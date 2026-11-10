@@ -2,6 +2,7 @@
 
 use App\Ai\Agents\PersonalAssistant;
 use App\Ai\Tools\KnowledgeBase;
+use Laravel\Ai\Tools\Request;
 
 test('the assistant answers a question through the api', function () {
     PersonalAssistant::fake(['Branell is a full-stack developer.']);
@@ -33,6 +34,14 @@ test('the assistant api is rate limited per ip', function () {
     }
 
     $this->postJson('/api/assistant', ['question' => 'Hello?'])->assertTooManyRequests();
+});
+
+test('the knowledge base reads every topic file', function () {
+    foreach (['about', 'contact', 'experience', 'project', 'technologies'] as $topic) {
+        $content = (new KnowledgeBase)->handle(new Request(['topic' => $topic]));
+
+        expect((string) $content)->not->toBeEmpty()->not->toContain('No knowledge file found');
+    }
 });
 
 test('the knowledge base describes every topic it can read', function () {
